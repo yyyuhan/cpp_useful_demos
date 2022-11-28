@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Local Installations
+*/.local
+*/.build
+networking/grpc
+networking/protobuf
