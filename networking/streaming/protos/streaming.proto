@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package streampack;
+
+service Streamer {
+    rpc ClientStream (StreamRequest) returns (NormResponse) {}
+}
+
+message StreamRequest {
+    bytes content = 1;
+}
+
+message NormResponse {
+    int32 ret = 1;
+    string msg = 2;
+}
