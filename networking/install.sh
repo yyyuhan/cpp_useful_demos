@@ -2,6 +2,7 @@
 
 mkdir .local
 export INSTALL_PREFIX="$PWD/.local"
+export PATH="$INSTALL_PREFIX/bin:$PATH"
 export CMAKE_GENERATOR=Ninja
 export PB_VER=“v3.21.9”
 export GRPC_VER=“v1.50.0”

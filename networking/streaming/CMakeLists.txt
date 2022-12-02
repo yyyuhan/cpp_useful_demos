@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.5.1)
 
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+  set (CMAKE_CXX_STANDARD 17)
+endif()
+
 project(StreamingRPC CXX)
 
-if(CMAKE_CROSSCOMPILING)
+find_package(Protobuf REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
 find_program(_PROTOBUF_PROTOC protoc)
-else()
-set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
-endif()
-set(_GRPC_GRPCPP grpc++)
-set(_PROTOBUF_LIBPROTOBUF libprotobuf)
-set(_REFLECTION grpc++_reflection)
+find_program(_GRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
+set(_GRPC_GRPCPP gRPC::grpc++)
+set(_PROTOBUF_LIBPROTOBUF protobuf::libprotobuf)
+set(_REFLECTION gRPC::grpc++_reflection)
+
 
 # Proto file
 get_filename_component(stream_proto "protos/streaming.proto" ABSOLUTE)
@@ -31,7 +35,7 @@ add_custom_command(
       DEPENDS "${stream_proto}")
 
 # Include generated *.pb.h files
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+#include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 # stream_grpc_proto
 add_library(stream_grpc_proto
@@ -39,14 +43,17 @@ add_library(stream_grpc_proto
   ${stream_grpc_hdrs}
   ${stream_proto_srcs}
   ${stream_proto_hdrs})
-#target_link_libraries(stream_grpc_proto
+# target_link_libraries(stream_grpc_proto
 #  ${_REFLECTION}
 #  ${_GRPC_GRPCPP}
 #  ${_PROTOBUF_LIBPROTOBUF})
 
-# Targets greeter_[async_](client|server)
+# Include ProtoBuf headers
+target_include_directories(stream_grpc_proto PRIVATE ${Protobuf_INCLUDE_DIRS})
+
+# Targets stream_[async_](client|server)
 foreach(_target
-  stream_client server)
+  stream_client)
   add_executable(${_target} "${_target}.cc")
   target_link_libraries(${_target}
     stream_grpc_proto
