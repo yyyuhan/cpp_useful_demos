@@ -57,7 +57,6 @@ public:
         auto options = grpc::WriteOptions();
         for (int i = 0; i < 5; ++i)
         {
-
             mut_req.set_id(i + 1);
             writer->Write(mut_req, options);
         }
@@ -98,6 +97,7 @@ int main()
     auto status = client.UnarySendRecv(req, &resp);
     client.EvalStatus(status, resp);
 
+    cout << PRINT_DELIM(stream client send recv) << endl;
     status = client.ClientStreamSendRecv(req, &resp);
     client.EvalStatus(status, resp);
 }
