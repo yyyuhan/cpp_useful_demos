@@ -2,12 +2,14 @@ syntax = "proto3";
 
 package streampack;
 
-service Streamer {
-    rpc ClientStream (StreamRequest) returns (NormResponse) {}
+service Communicator {
+    rpc UnaryComm (NormRequest) returns (NormResponse) {}
+    rpc ClientStreamComm (stream NormRequest) returns (NormResponse) {}
 }
 
-message StreamRequest {
-    bytes content = 1;
+message NormRequest {
+    int32 id = 1;
+    bytes content = 2;
 }
 
 message NormResponse {

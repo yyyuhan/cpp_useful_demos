@@ -53,7 +53,7 @@ target_include_directories(stream_grpc_proto PRIVATE ${Protobuf_INCLUDE_DIRS})
 
 # Targets stream_[async_](client|server)
 foreach(_target
-  stream_client)
+  stream_client stream_server)
   add_executable(${_target} "${_target}.cc")
   target_link_libraries(${_target}
     stream_grpc_proto
